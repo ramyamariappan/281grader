@@ -1,0 +1,24 @@
+extends layout
+
+block content
+	div.container
+		div.row
+			div.col-sm-6.col-md-18.col-md-offset-4
+				#user
+					h1.text-center.login-title Welcome #{user.username} 
+							
+						a(href='/signout', class='text-center new-account') Sign Out
+		table
+			thead
+				tr: th CUSTOMIZE GRADING
+			tbody				
+				each value, index in ['Scale', 'Points', 'Completion', 'Comments']
+					tr
+						td= value
+						td: input(type="checkbox")
+	div.container
+		div.row
+			div.col-sm-6.col-md-25.col-md-offset-4
+				#save
+					h1.text-center.login-title
+						a(href='/saveGrading', class='text-center new-account') SAVE GRADING STRATEGY
