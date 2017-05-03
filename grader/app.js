@@ -4,6 +4,7 @@ var favicon = require('serve-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
+var multer = require('multer');
 
 var index = require('./routes/index');
 
@@ -14,6 +15,8 @@ var dbConfig = require('./config/db.js');
 var mongoose = require('mongoose');
 mongoose.connect(dbConfig.url);
 
+
+var pool = require("./config/rds.js");
 
 var app = express();
 
@@ -46,7 +49,9 @@ app.use(flash());
 var initPassport = require('./passport/init');
 initPassport(passport);
 
-var routes = require('./routes/index')(passport);
+var uploads = multer({ dest: './uploads'});
+console.log(uploads);
+var routes = require('./routes/index')(passport, pool, uploads);
 app.use('/', routes);
 	
 
@@ -67,5 +72,6 @@ app.use(function(err, req, res, next) {
   res.status(err.status || 500);
   res.render('error');
 });
+
 
 module.exports = app;

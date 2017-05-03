@@ -1,24 +1,34 @@
 extends layout
 
 block content
-	div.container
-		div.row
-			div.col-sm-6.col-md-18.col-md-offset-4
-				#user
-					h1.text-center.login-title Welcome #{user.username} 
-							
-						a(href='/signout', class='text-center new-account') Sign Out
-		table
-			thead
-				tr: th CUSTOMIZE GRADING
-			tbody				
-				each value, index in ['Scale', 'Points', 'Completion', 'Comments']
-					tr
-						td= value
-						td: input(type="checkbox")
-	div.container
-		div.row
-			div.col-sm-6.col-md-25.col-md-offset-4
-				#save
+	form(action='/saveGradingAttributes',method='post')
+		div.container
+			div.row
+				div.col-sm-6.col-md-18.col-md-offset-4
+					#user
+						h1.text-center.login-title Welcome #{user.username} 
+								
+							a(href='/signout', class='text-center new-account') Sign Out
+			table
+				thead
+					tr: th CUSTOMIZE GRADING
+				tbody				
+					
+					if fields == undefined
+						fields = ['Scale', 'Points', 'Completion', 'Comments']
+					each v, i in fields
+						tr
+							if fields[i].FIELD_ENABLE == 1
+								td= fields[i].FIELD_NAME							
+								td: input(type="checkbox", id=fields[i].FIELD_NAME, name=fields[i].FIELD_NAME, checked)
+							else
+								td= fields[i].FIELD_NAME							
+								td: input(type="checkbox", id=fields[i].FIELD_NAME, name=fields[i].FIELD_NAME)							
+			div.row
+				div.col-sm-6.col-md-25.col-md-offset-4
+					h2.text-center.login-title
+						input(type='submit',value='SAVE GRADING STRATEGY')
+			div.row
+				div.col-sm-6.col-md-25.col-md-offset-4
 					h1.text-center.login-title
-						a(href='/saveGrading', class='text-center new-account') SAVE GRADING STRATEGY
+						a(href='/grade', class='text-center new-account') GRADE NOW!

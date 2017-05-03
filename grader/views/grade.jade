@@ -1,0 +1,35 @@
+extends layout
+
+block content
+	form(action='/unzip',method='post',enctype = "multipart/form-data")
+		div.container
+			div.row
+				div.col-sm-6.col-md-18.col-md-offset-4
+					#user
+						h1.text-center.login-title Welcome #{user.username} 
+								
+							a(href='/signout', class='text-center new-account') Sign Out
+			div.row
+				div.col-sm-6.col-md-18.col-md-offset-4
+					input(type='file', id='zipfile', name='zipfile')
+					br
+					input(type='submit',value='Unzip')
+					if src != undefined
+						img(src='data:./unzipped/uml.png;base64,#{src}')
+
+	form(action='/saveGrades',method='post')
+		div.container
+			div.row
+				div.col-sm-6.col-md-18.col-md-offset-4
+				table
+					thead
+						tr: th GRADE
+					tbody
+						if fields == undefined
+							fields = ['Scale', 'Points', 'Completion', 'Comments']
+						each v, i in fields
+							tr
+								if fields[i].FIELD_ENABLE == 1
+									td= fields[i].FIELD_NAME							
+									td: input(type="text", id=fields[i].FIELD_NAME, name=fields[i].FIELD_NAME)
+				input(type='submit',value='SAVE GRADES')

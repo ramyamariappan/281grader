@@ -18,6 +18,11 @@
     "passport-local": "~1.0.0",
     "serve-favicon": "~2.3.0",
     "bcrypt-nodejs" : "*",
-    "connect-flash" : "*"
+    "connect-flash" : "*",
+    "mysql": "^2.5.4",
+    "unzip2": "latest",
+    "multer": "latest",
+    "del": "latest",
+    "eval": "latest"
   }
 }
