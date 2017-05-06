@@ -31,6 +31,13 @@ module.exports = function(passport,pool, uploads){
 		failureFlash : true  
 	}));
 
+	/* Handle Login POST */
+	router.post('/'+req.user.username+'/login', passport.authenticate('login', {
+		successRedirect: '/'+req.user.username+'/home',
+		failureRedirect: '/'+req.user.username+'/',
+		failureFlash : true  
+	}));
+
 	/* GET Registration Page */
 	router.get('/signup', function(req, res){
 		res.render('register',{message: req.flash('message')});
@@ -71,16 +78,16 @@ module.exports = function(passport,pool, uploads){
 	});
 
 	/* Handle Redirection to grading page */
-	router.get('/grade', function(req, res) {	
+	router.get('/'+req.user.username+'/grade', function(req, res) {	
 		pool.getConnection(function(err, conn){
            
 		conn.query("select * from TENANTS_FIELDS  where TENANT_ID = ?",[req.user.username], 
         	function(err, rows) {
                  var results = JSON.parse(JSON.stringify(rows));
-                 //console.log("~~~~~~~~~~~~~~~~~ "+results);
-         		 //console.log("~~~~~~~~~~~~~~~~~ "+lb.loadbalancer);
-                 res.render('grade', { user: req.user , fields : results});
-                 //res.render(lb.loadbalancer+"/"+req.user.username+"/grade", { user: req.user , fields : results});
+                 console.log("~~~~~~~~~~~~~~~~~ "+results);
+         		 console.log("~~~~~~~~~~~~~~~~~ "+lb.loadbalancer);
+                 res.render('/'+req.user.username+'grade', { user: req.user , fields : results});
+                 
             });
 		conn.release();
 
@@ -88,7 +95,7 @@ module.exports = function(passport,pool, uploads){
 	});
 
 	/* Handle Redirection to grading page */
-	router.post('/unzip', uploads.single('zipfile'),function(req, res) {
+	router.post('/'+req.user.username+'/unzip', uploads.single('zipfile'),function(req, res) {
 		
  
 		del(['./unzipped/*.*']).then(paths => {
@@ -126,7 +133,7 @@ module.exports = function(passport,pool, uploads){
 			                 var results = JSON.parse(JSON.stringify(rows));
 			                 console.log("~~~~~~~~~~~~~~~~~ "+results);
 			         
-			                 res.render('grade', { user: req.user , src: data.toString('base64'), fields : results});
+			                 res.render('/'+req.user.username+'grade', { user: req.user , src: data.toString('base64'), fields : results});
 			            });
 					conn.release();
 
@@ -209,7 +216,7 @@ module.exports = function(passport,pool, uploads){
 	});
 
 	/* Save Grading */
-	router.post('/saveGrades', function(req, res) {
+	router.post('/'+req.user.username+'/saveGrades', function(req, res) {
     	
 	  	var scale = req.body.scale;
         var points = req.body.points
@@ -252,7 +259,7 @@ module.exports = function(passport,pool, uploads){
                 } else{
                    //res.status(200).json(results);
                    info = 'Graded Successfully!';
-                   res.render('graded', { user: req.user,info : info });
+                   res.render('/'+req.user.username+'graded', { user: req.user,info : info });
                 }
                 conn.release();
             });
