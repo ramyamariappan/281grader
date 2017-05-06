@@ -12,18 +12,21 @@ block content
 			table
 				thead
 					tr: th CUSTOMIZE GRADING
-				tbody				
-					
-					if fields == undefined
-						fields = ['Scale', 'Points', 'Completion', 'Comments']
-					each v, i in fields
-						tr
-							if fields[i].FIELD_ENABLE == 1
-								td= fields[i].FIELD_NAME							
-								td: input(type="checkbox", id=fields[i].FIELD_NAME, name=fields[i].FIELD_NAME, checked)
-							else
-								td= fields[i].FIELD_NAME							
-								td: input(type="checkbox", id=fields[i].FIELD_NAME, name=fields[i].FIELD_NAME)							
+				tbody
+					if fields == ''
+						each v, i in ['scale', 'points', 'completion', 'comments']
+							tr
+								td= v							
+								td: input(type="checkbox", id=v, name=v)			
+					else 
+						each v, i in fields
+							tr
+								if fields[i].FIELD_ENABLE == 1
+									td= fields[i].FIELD_NAME							
+									td: input(type="checkbox", id=fields[i].FIELD_NAME, name=fields[i].FIELD_NAME, checked)
+								else
+									td= fields[i].FIELD_NAME							
+									td: input(type="checkbox", id=fields[i].FIELD_NAME, name=fields[i].FIELD_NAME)							
 			div.row
 				div.col-sm-6.col-md-25.col-md-offset-4
 					h2.text-center.login-title
@@ -31,4 +34,4 @@ block content
 			div.row
 				div.col-sm-6.col-md-25.col-md-offset-4
 					h1.text-center.login-title
-						a(href='/grade', class='text-center new-account') GRADE NOW!
+						a(href=gradeLink, class='text-center new-account', target="_blank") GRADE NOW!

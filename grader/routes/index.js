@@ -4,6 +4,7 @@ var fs = require('fs');
 var unzip = require('unzip2');
 var del = require('del');
 var parsePaths = require('../config/parsePaths');
+var lb = require('../config/lb.js');
 
 var isAuthenticated = function (req, res, next) {
 	// if user is authenticated in the session, call the next() to call the next request handler 
@@ -50,7 +51,10 @@ module.exports = function(passport,pool, uploads){
         	function(err, rows) {
                  var results = JSON.parse(JSON.stringify(rows));
                  console.log(results);
-                 res.render('home', { user: req.user , fields : results});
+                 console.log("~~~~~~~~~~~~~~~~~ "+lb.loadbalancer);
+                 console.log("~~~~~~~~~~~~~~~~~ "+req.header.host);
+                 var gradeLink = "http://"+lb.loadbalancer+"/"+req.user.username+"/grade";
+                 res.render('home', { user: req.user , fields : results, gradeLink: gradeLink});
             });
 		conn.release();
 
@@ -73,9 +77,10 @@ module.exports = function(passport,pool, uploads){
 		conn.query("select * from TENANTS_FIELDS  where TENANT_ID = ?",[req.user.username], 
         	function(err, rows) {
                  var results = JSON.parse(JSON.stringify(rows));
-                 console.log("~~~~~~~~~~~~~~~~~ "+results);
-         
+                 //console.log("~~~~~~~~~~~~~~~~~ "+results);
+         		 //console.log("~~~~~~~~~~~~~~~~~ "+lb.loadbalancer);
                  res.render('grade', { user: req.user , fields : results});
+                 //res.render(lb.loadbalancer+"/"+req.user.username+"/grade", { user: req.user , fields : results});
             });
 		conn.release();
 
@@ -157,6 +162,7 @@ module.exports = function(passport,pool, uploads){
             	function(err, rows) {
 	                 var results = JSON.parse(JSON.stringify(rows));
 	                 console.log(results);
+	                 console.log(rows.length);
 	                 if(rows.length ==0){
 	                 	var insert="INSERT INTO TENANTS_TABLE (TENANT_ID,TENANT_EMAIL)" 
             			+" VALUES(?,?)";
