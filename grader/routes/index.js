@@ -82,12 +82,12 @@ module.exports = function(passport,pool, uploads){
 	router.get('/:username/grade', function(req, res) {	
 		pool.getConnection(function(err, conn){
            
-		conn.query("select * from TENANTS_FIELDS  where TENANT_ID = ?",[req.user.username], 
+		conn.query("select * from TENANTS_FIELDS  where TENANT_ID = ?",[req.params.username], 
         	function(err, rows) {
                  var results = JSON.parse(JSON.stringify(rows));
                  console.log("~~~~~~~~~~~~~~~~~ "+results);
          		 console.log("~~~~~~~~~~~~~~~~~ "+lb.loadbalancer);
-                 res.render('grade', { user: req.user , fields : results});
+                 res.render('grade', { username: req.params.username , fields : results});
                  
             });
 		conn.release();
@@ -97,6 +97,25 @@ module.exports = function(passport,pool, uploads){
 
 	/* Handle Redirection to grading page */
 	router.post('/:username/unzip', uploads.single('zipfile'),function(req, res) {
+		console.log("FILE"+req.file);
+		if(req.file == undefined){
+			console.log("inside if");
+			pool.getConnection(function(err, conn){
+           
+			conn.query("select * from TENANTS_FIELDS  where TENANT_ID = ?",[req.params.username], 
+	        	function(err, rows) {
+	                 var results = JSON.parse(JSON.stringify(rows));
+	                 console.log("~~~~~~~~~~~~~~~~~ "+results);
+	         		 console.log("~~~~~~~~~~~~~~~~~ "+lb.loadbalancer);
+	                 res.render('grade', { username: req.params.username , fields : results, error: "Please select a valid file!"});
+	                 
+	            });
+			conn.release();
+
+			});	
+		}
+		else{
+			console.log("else"+req.file);
 		
  
 		del(['./unzipped/*.*']).then(paths => {
@@ -129,12 +148,12 @@ module.exports = function(passport,pool, uploads){
 		        function (err, data) {
 		        	pool.getConnection(function(err, conn){
            
-					conn.query("select * from TENANTS_FIELDS  where TENANT_ID = ?",[req.user.username], 
+					conn.query("select * from TENANTS_FIELDS  where TENANT_ID = ?",[req.params.username], 
 			        	function(err, rows) {
 			                 var results = JSON.parse(JSON.stringify(rows));
 			                 console.log("~~~~~~~~~~~~~~~~~ "+results);
 			         
-			                 res.render('grade', { user: req.user , src: data.toString('base64'), fields : results});
+			                 res.render('grade', { username: req.params.username , src: data.toString('base64'), fields : results});
 			            });
 					conn.release();
 
@@ -143,6 +162,7 @@ module.exports = function(passport,pool, uploads){
 					//res.render('grade', { user: req.user, src: data.toString('base64'), fields: req.fields});
 				})
 		}, 5000);
+		}	
 
 	});
 
@@ -230,22 +250,22 @@ module.exports = function(passport,pool, uploads){
             var insert="INSERT INTO TENANTS_GRADES (TENANT_ID,FIELD_NAME, FIELD_VALUE)";
             var flag = false;
             if(scale != undefined){
-            	insert+=" VALUES('"+req.user.username+"','scale','"+scale+"')";
+            	insert+=" VALUES('"+req.params.username+"','scale','"+scale+"')";
             	flag = true;
             }
             if(points != undefined){
             	if(flag ==true) insert+=",";
-            	insert+="('"+req.user.username+"','points','"+points+"')";
+            	insert+="('"+req.params.username+"','points','"+points+"')";
             	flag = true;
             } 
             if(comments != undefined){
             	if(flag ==true) insert+=",";
-            	insert+="('"+req.user.username+"','comments','"+comments+"')";
+            	insert+="('"+req.params.username+"','comments','"+comments+"')";
             	flag = true;
             } 
             if(completion != undefined){
             	if(flag ==true) insert+=",";
-            	insert+="('"+req.user.username+"','completion','"+completion+"')";
+            	insert+="('"+req.params.username+"','completion','"+completion+"')";
             	flag = true;
             } 
             
@@ -260,7 +280,7 @@ module.exports = function(passport,pool, uploads){
                 } else{
                    //res.status(200).json(results);
                    info = 'Graded Successfully!';
-                   res.render('graded', { user: req.user,info : info });
+                   res.render('graded', { username: req.params.username,info : info });
                 }
                 conn.release();
             });
