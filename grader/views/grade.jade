@@ -1,7 +1,7 @@
 extends layout
 
 block content
-	form(action='#{user.username}/unzip',method='post',enctype = "multipart/form-data")
+	form(action='/#{user.username}/unzip',method='post',enctype = "multipart/form-data")
 		div.container
 			div.row
 				div.col-sm-6.col-md-18.col-md-offset-4
@@ -17,7 +17,7 @@ block content
 					if src != undefined
 						img(src='data:./unzipped/uml.png;base64,#{src}')
 
-	form(action='#{user.username}/saveGrades',method='post')
+	form(action='/#{user.username}/saveGrades',method='post')
 		div.container
 			div.row
 				div.col-sm-6.col-md-18.col-md-offset-4

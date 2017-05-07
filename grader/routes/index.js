@@ -87,7 +87,7 @@ module.exports = function(passport,pool, uploads){
                  var results = JSON.parse(JSON.stringify(rows));
                  console.log("~~~~~~~~~~~~~~~~~ "+results);
          		 console.log("~~~~~~~~~~~~~~~~~ "+lb.loadbalancer);
-                 res.render('/'+req.params.username+'grade', { user: req.user , fields : results});
+                 res.render('grade', { user: req.user , fields : results});
                  
             });
 		conn.release();
@@ -134,7 +134,7 @@ module.exports = function(passport,pool, uploads){
 			                 var results = JSON.parse(JSON.stringify(rows));
 			                 console.log("~~~~~~~~~~~~~~~~~ "+results);
 			         
-			                 res.render('/'+req.params.username+'grade', { user: req.user , src: data.toString('base64'), fields : results});
+			                 res.render('grade', { user: req.user , src: data.toString('base64'), fields : results});
 			            });
 					conn.release();
 
@@ -260,7 +260,7 @@ module.exports = function(passport,pool, uploads){
                 } else{
                    //res.status(200).json(results);
                    info = 'Graded Successfully!';
-                   res.render('/'+req.user.username+'graded', { user: req.user,info : info });
+                   res.render('graded', { user: req.user,info : info });
                 }
                 conn.release();
             });
