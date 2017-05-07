@@ -1,6 +1,8 @@
 extends layout
 
 block content
+	if src == undefined
+		body(style='background-image: url(/images/grading.jpg); background-size: cover; background-size: 100% 180%; background-repeat: no-repeat')
 	form(action='/#{username}/unzip',method='post',enctype = "multipart/form-data")
 		div.container
 			div.row
@@ -11,19 +13,23 @@ block content
 						
 			div.row
 				div.col-sm-6.col-md-18.col-md-offset-4
-					input(type='file', id='zipfile', name='zipfile')
-					br
-					input(type='submit',value='Unzip')
-					if src != undefined
-						img(src='data:./unzipped/uml.png;base64,#{src}')
-
+				table
+					thead
+						tr: FILE
+					tbody
+						input(type='file', id='zipfile', name='zipfile')
+						br
+						input(type='submit',value='Unzip')
+						if src != undefined
+							img(src='data:./unzipped/uml.png;base64,#{src}')
+	br						
 	form(action='/#{username}/saveGrades',method='post')
 		div.container
 			div.row
 				div.col-sm-6.col-md-18.col-md-offset-4
 				table
 					thead
-						tr: th GRADE
+						tr: th GRADING ATTRIBUTES
 					tbody
 						if fields == undefined
 							fields = ['Scale', 'Points', 'Completion', 'Comments']

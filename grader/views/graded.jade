@@ -1,6 +1,7 @@
 extends layout
 
 block content
+	body(style='background-image: url(/images/grading.jpg); background-size: cover; background-size: 100% 300%; background-repeat: no-repeat')
 		div.container
 			div.row
 				div.col-sm-6.col-md-18.col-md-offset-4
@@ -8,4 +9,4 @@ block content
 						h1.text-center.login-title Grading for #{username}
 			div.row
 				div.col-sm-6.col-md-18.col-md-offset-4
-					h3.text-center.login-title  #{info}
+					h3(style="text-align:center;color: #008000")  #{info}
