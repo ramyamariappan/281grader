@@ -1,4 +1,6 @@
 module.exports = {
-  'tenantB' : 'java -jar umlparserB.jar ./unzipped ./unzipped/uml.png',
-  'tenantA' : 'java -jar umlparser.jar class ./unzipped uml',
+  'kang' : 'java -jar umlparserB.jar ./unzipped ./unzipped/uml.png',
+  'akshay' : 'java -jar umlparser.jar class ./unzipped uml',
+  'ipsha' : 'java -jar umlparserC.jar class ./unzipped uml',
+  'huzaifa' : 'java -jar umlparserD.jar class ./unzipped uml',
 }

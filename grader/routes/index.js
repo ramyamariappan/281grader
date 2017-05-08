@@ -200,10 +200,11 @@ module.exports = function(passport,pool, uploads){
 			                   console.log("Error "+JSON.stringify(er));
 			                   res.status(500).send(er);
 			                } else{
-			                   res.status(200).json(results);
+			                   //res.status(200).json(results);
 			                }
 			                
 			            });
+
 	                 }
 	            });
            
@@ -211,7 +212,8 @@ module.exports = function(passport,pool, uploads){
             var insert="INSERT INTO TENANTS_FIELDS (TENANT_ID,FIELD_NAME, FIELD_ENABLE)" 
             			+" VALUES(?,?,?), (?,?,?), (?,?,?), (?,?,?) ON DUPLICATE KEY UPDATE" 
             			+" FIELD_ENABLE = VALUES(FIELD_ENABLE) ";
-            conn.query(insert,[req.user.username,"scale", (scale !=undefined?"1":"0"), 
+            setTimeout(function(){
+            	conn.query(insert,[req.user.username,"scale", (scale !=undefined?"1":"0"), 
             	req.user.username,"points",(points !=undefined?"1":"0"),
             	req.user.username,"comments",(comments !=undefined?"1":"0"),
             	req.user.username,"completion",(completion !=undefined?"1":"0")
@@ -223,17 +225,17 @@ module.exports = function(passport,pool, uploads){
                    //res.status(200).json(results);
                    //res.render('home', { user: req.user,fields : results });
                 }
-                conn.release();
-            });
-
-            conn.query("select * from TENANTS_FIELDS  where TENANT_ID = ?",[req.user.username], 
-        	function(err, rows) {
-                 var results = JSON.parse(JSON.stringify(rows));
-                 console.log(results);
-                 res.render('home', { user: req.user , fields : results});
-            });
-
-	        });
+                
+            	});
+	            conn.query("select * from TENANTS_FIELDS  where TENANT_ID = ?",[req.user.username], 
+	        	function(err, rows) {
+	                 var results = JSON.parse(JSON.stringify(rows));
+	                 console.log(results);
+	                 res.render('home', { user: req.user , fields : results});
+	            });
+	            conn.release();
+			}, 3000);
+	       });
 	});
 
 	/* Save Grading */
