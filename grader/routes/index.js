@@ -231,7 +231,8 @@ module.exports = function(passport,pool, uploads){
 	        	function(err, rows) {
 	                 var results = JSON.parse(JSON.stringify(rows));
 	                 console.log(results);
-	                 res.render('home', { user: req.user , fields : results});
+	                 var gradeLink = "http://"+lb.loadbalancer+"/"+req.user.username+"/grade";
+	                 res.render('home', { user: req.user , fields : results, gradeLink: gradeLink});
 	            });
 	            conn.release();
 			}, 3000);
