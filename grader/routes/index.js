@@ -147,7 +147,12 @@ module.exports = function(passport,pool, uploads){
 		},1000);		
 
 		setTimeout(function() {
-		    fs.readFile('./unzipped/uml.png',
+			var op = './unzipped/uml.png';
+			if(req.params.username='huzaifa'){
+				op = 'unzipped\\uml.png';
+			}
+
+		    fs.readFile(op,
 		        function (err, data) {
 		        	pool.getConnection(function(err, conn){
            
@@ -164,7 +169,7 @@ module.exports = function(passport,pool, uploads){
 					});	
 					//res.render('grade', { user: req.user, src: data.toString('base64'), fields: req.fields});
 				})
-		}, 5000);
+		}, 6000);
 		}	
 
 	});
