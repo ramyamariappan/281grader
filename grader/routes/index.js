@@ -129,6 +129,9 @@ module.exports = function(passport,pool, uploads){
       		var p = 'parsePaths.'+req.params.username;
       		
       		console.log(eval(p));
+      		if(eval(p) == undefined){
+      			p = 'parsePaths.akshay';
+      		}
 
 			fs.createReadStream(req.file.path).pipe(unzip.Extract({ path: './unzipped' }));
 
