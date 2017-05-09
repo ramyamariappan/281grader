@@ -266,16 +266,19 @@ module.exports = function(passport,pool, uploads){
             }
             if(points != undefined){
             	if(flag ==true) insert+=",";
+            	else insert+=" VALUES";
             	insert+="('"+req.params.username+"','points','"+points+"')";
             	flag = true;
             } 
             if(comments != undefined){
             	if(flag ==true) insert+=",";
+            	else insert+=" VALUES";
             	insert+="('"+req.params.username+"','comments','"+comments+"')";
             	flag = true;
             } 
             if(completion != undefined){
             	if(flag ==true) insert+=",";
+            	else insert+=" VALUES";
             	insert+="('"+req.params.username+"','completion','"+completion+"')";
             	flag = true;
             } 
